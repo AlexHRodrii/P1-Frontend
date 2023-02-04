@@ -5,6 +5,10 @@
 /* /*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! 
 	Completar los estilos que faltan y modificar al gusto del alumno
 **/
+img.viu{
+  width: 100px;
+  height: 100px;
+}
 
 /* Todos los contadores estarán ubicados en la parte inferior 
    derecha (position absolute) de los respectivos tapetes (position relative).
