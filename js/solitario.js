@@ -44,14 +44,41 @@ let temporizador = null; // manejador del temporizador
 
 /***** FIN DECLARACIÓN DE VARIABLES GLOBALES *****/
 
+// Evento que llama a la función para iniciar el juego una vez se ha cargado el contenido del DOM
+document.addEventListener("DOMContentLoaded", comenzarJuego);
 
 // Rutina asociada a boton reset
 function resetGame() {
+    // Restablecimiento de contadores a 0
+    [contInicial, contSobrantes, contReceptor1, contReceptor2, contReceptor3, contReceptor4, contMovimientos].forEach((contador) => setContador(contador, 0));
 
+    // Restablecimiento de mazos
+    [mazoInicial, mazoSobrantes, mazoReceptor1, mazoReceptor2, mazoReceptor3, mazoReceptor4].forEach((mazo) => mazo.length = 0);
+
+    // Restablecimiento de tapetes borrando las posibles cartas que tengan asociadas
+    [tapeteInicial, tapeteSobrantes, tapeteReceptor1, tapeteReceptor2, tapeteReceptor3, tapeteReceptor4].forEach((tapete) => {
+        while (tapete.lastChild && tapete.lastChild.tagName === "IMG") {
+            tapete.removeChild(tapete.lastChild)
+        }
+    });
+
+    // Restablecimiento del paso
+    paso = 5;
+
+    // Creación del mazo inicial de juego
+    mazoInicial = cargarMazoInicial()
+
+    // Barajar y cargar el mazoInicial en el tapete inicial
+    barajar(mazoInicial);
+    cargarTapeteInicial(mazoInicial);
+
+    // Arrancar el conteo de tiempo (tal y como está diseñado parará el temporizador anterior)
+    arrancarTiempo();
 }
 
-// Evento que llama a la función para iniciar el juego una vez se ha cargado el contenido del DOM
-document.addEventListener("DOMContentLoaded", comenzarJuego);
+function endGame() {
+
+}
 
 // Función encargada de gestionar el inicio del juego (inicialización de mazos, tapetes y contadores)
 function comenzarJuego() {
@@ -73,53 +100,185 @@ function comenzarJuego() {
     contMovimientos = document.getElementById("contador_movimientos");
     contTiempo = document.getElementById("contador_tiempo");
 
+    // Registro del evento 'click' asociado al botón para reiniciar la partida
+    document.getElementById('reset').addEventListener('click', resetGame);
+
     // Desactivación de eventos por defecto no deseados
     [tapeteInicial, tapeteSobrantes, tapeteReceptor1, tapeteReceptor2, tapeteReceptor3, tapeteReceptor4].forEach((tapete) => {
         tapete.ondragenter = disableDefaultEvents
         tapete.ondragover = disableDefaultEvents
         tapete.ondragleave = disableDefaultEvents
-        tapete.ondrop = recibirCarta
+        tapete.ondrop = (e) => {
+            recibirCarta(e, tapete)
+        }
     });
     tapeteInicial.ondrop = disableDefaultEvents;
 
+    // Puesta a cero de contadores de mazos
+    [contInicial, contSobrantes, contReceptor1, contReceptor2, contReceptor3, contReceptor4, contMovimientos].forEach((contador) => setContador(contador, 0));
 
-    /* Crear baraja, es decir crear el mazoInicial. Este será un array cuyos
-    elementos serán elementos HTML <img>, siendo cada uno de ellos una carta.
-    Sugerencia: en dos bucles for, bárranse los "palos" y los "numeros", formando
-    oportunamente el nombre del fichero png que contiene a la carta (recuérdese poner
-    el path correcto en la URL asociada al atributo src de <img>). Una vez creado
-    el elemento img, inclúyase como elemento del array mazoInicial.
-    */
+    // Creación del mazo inicial de juego
+    mazoInicial = cargarMazoInicial()
 
-    /*
+    // Barajar y cargar el mazoInicial en el tapete inicial
+    barajar(mazoInicial);
+    cargarTapeteInicial(mazoInicial);
+
+    // Arrancar el conteo de tiempo
+    arrancarTiempo();
+}
+
+/*
+    Función orientada a crear el mazo inicial de juego (vector de elementos <img>).
     El enunciado sugiere realizar un bucle anidado para formar el vector de mazo inicial; sin embargo,
     es más eficiente hacer uso de la programación funcional de javascript usando las funciones map() y flatMap().
     Estas funciones nos permiten ejecutar el callback deseado (en nuestro caso una concatenación de strings)
     en cada uno de los elementos del vector
      */
-
-    mazoInicial = palos.flatMap(palo => numeros.map(numero => {
+function cargarMazoInicial() {
+    return palos.flatMap(palo => numeros.map(numero => {
         let imgElement = new Image()
         imgElement.src = `imagenes/baraja/${numero}-${palo}.png` // TODO --> Revisar path
         imgElement.id = `${numero}-${palo}`;
         imgElement.alt = `${numero}-${palo}`;
         imgElement.setAttribute('data-numero', numero.toString());
         imgElement.setAttribute('data-palo', palo);
-        imgElement.setAttribute('data-mazo', 'mazoInicial')
-        imgElement.ondragstart = moverCarta;
+        imgElement.ondragstart = iniciarDragCarta;
 
         return imgElement;
     }))
+}
 
-    // Barajar y dejar mazoInicial en tapete inicial
-    barajar(mazoInicial);
-    cargarTapeteInicial(mazoInicial);
+/*
+    Función la cual recibe un mazo de cartas por parámetro y añade todas las cartas del mismo al tapete inicial de la vista
+    ajustando las propiedades de estilo necesarias de las cartas para que se muestren correctamente
+*/
+function cargarTapeteInicial(mazo) {
+    mazo.forEach(((carta, idx, array) => {
+        carta.style.position = 'absolute';
+        carta.style.left = `${paso}px`
+        carta.style.top = `${paso}px`
+        carta.style.width = '20%';
+        carta.draggable = idx === array.length - 1;
+        carta.setAttribute('data-tapete', 'inicial')
 
-    // Puesta a cero de contadores de mazos
-    [contSobrantes, contReceptor1, contReceptor2, contReceptor3, contReceptor4, contMovimientos].forEach((contador) => setContador(contador, 0));
+        tapeteInicial.appendChild(carta)
 
-    // Arrancar el conteo de tiempo
-    arrancarTiempo();
+        paso += 5;
+        incContador(contInicial);
+    }))
+}
+
+function iniciarDragCarta(e) {
+    e.dataTransfer.setData("text/plain/numero", e.target.dataset["numero"]);
+    e.dataTransfer.setData("text/plain/palo", e.target.dataset["palo"]);
+    e.dataTransfer.setData("text/plain/tapete", e.target.dataset["tapete"]);
+}
+
+function recibirCarta(e, tapete) {
+    e.preventDefault();
+    let numero = parseInt(e.dataTransfer.getData("text/plain/numero"));
+    let palo = e.dataTransfer.getData("text/plain/palo");
+    let tapeteOrigen = document.getElementById(e.dataTransfer.getData("text/plain/tapete"));
+    let tapeteDestino = document.getElementById(tapete.id);
+
+
+    switch (tapeteDestino.id) {
+        case 'receptor1':
+        case 'receptor2':
+        case 'receptor3':
+        case 'receptor4':
+            isDropAllowed(tapeteDestino, numero, palo) && trasladarCarta(tapeteOrigen, tapeteDestino, false);
+            break;
+        case 'sobrantes':
+            trasladarCarta(tapeteOrigen, tapeteDestino, true);
+            break;
+    }
+
+    if (mazoInicial.length === 0 && mazoSobrantes.length === 0) {
+        endGame();
+    } else if (mazoInicial.length === 0) {
+        mazoInicial = [...mazoSobrantes];
+        mazoSobrantes = [];
+        setContador(contSobrantes, 0);
+        barajar(mazoInicial);
+        cargarTapeteInicial(mazoInicial);
+    }
+}
+
+function isDropAllowed(tapeteDestino, numero, palo) {
+    let mazoDestino = obtenerMazoDesdeTapete(tapeteDestino)
+
+    if (mazoDestino.length > 0) {
+        let color = obtenerColorCarta(palo);
+
+        let ultimaCartaMazo = mazoDestino[mazoDestino.length - 1];
+        let numeroUltimaCarta = parseInt(ultimaCartaMazo.dataset["numero"]);
+        let colorUltimaCarta = obtenerColorCarta(ultimaCartaMazo.dataset["palo"]);
+
+        return ((color !== colorUltimaCarta) && (numero === numeroUltimaCarta - 1));
+    }
+
+    return numero === 12;
+}
+
+function trasladarCarta(tapeteOrigen, tapeteDestino, draggable) {
+    let mazoOrigen = obtenerMazoDesdeTapete(tapeteOrigen)
+    let mazoDestino = obtenerMazoDesdeTapete(tapeteDestino)
+
+    let carta = mazoOrigen.pop();
+    if (mazoOrigen.length > 0) mazoOrigen[mazoOrigen.length - 1].draggable = true
+    tapeteOrigen.removeChild(carta);
+
+    carta.draggable = draggable;
+    carta.style.width = '60%';
+    carta.style.top = '50%';
+    carta.style.left = '50%';
+    carta.style.transform = 'translate(-50%, -50%)';
+    carta.setAttribute('data-tapete', tapeteDestino.id)
+
+    mazoDestino.push(carta);
+    tapeteDestino.appendChild(carta);
+
+    incContador(obtenerContadorDesdeTapete(tapeteDestino));
+    incContador(contMovimientos);
+    decContador(obtenerContadorDesdeTapete(tapeteOrigen));
+}
+
+function obtenerMazoDesdeTapete(tapete) {
+    const correspondencias = {
+        inicial: 'mazoInicial',
+        sobrantes: 'mazoSobrantes',
+        receptor1: 'mazoReceptor1',
+        receptor2: 'mazoReceptor2',
+        receptor3: 'mazoReceptor3',
+        receptor4: 'mazoReceptor4',
+    }
+
+    return eval(correspondencias[tapete.id])
+}
+
+function obtenerContadorDesdeTapete(tapete) {
+    const correspondencias = {
+        inicial: 'contInicial',
+        sobrantes: 'contSobrantes',
+        receptor1: 'contReceptor1',
+        receptor2: 'contReceptor2',
+        receptor3: 'contReceptor3',
+        receptor4: 'contReceptor4',
+    }
+
+    return eval(correspondencias[tapete.id])
+}
+
+
+function obtenerColorCarta(palo) {
+    return ["viu", "cua"].includes(palo) ? 'naranja' : 'gris';
+}
+
+// Función cuyo objetivo es barajar el mazo proporcionado (array)
+function barajar(mazo) {
+    mazo.sort(() => Math.random() - 0.5);
 }
 
 /*
@@ -145,53 +304,6 @@ function arrancarTiempo() {
 
 }
 
-
-// Función cuyo objetivo es barajar el mazo proporcionado (array)
-function barajar(mazo) {
-    mazo.sort(() => Math.random() - 0.5);
-}
-
-/*
-    Función la cual recibe un mazo de cartas por parámetro y añade todas las cartas del mismo al tapete inicial de la vista
-    ajustando las propiedades de estilo necesarias de las cartas para que se muestren correctamente
-*/
-function cargarTapeteInicial(mazo) {
-    let numeroCartas = 0;
-
-    mazo.forEach(((carta, idx, array) => {
-        carta.style.position = 'absolute';
-        carta.style.left = `${paso}px`
-        carta.style.top = `${paso}px`
-        carta.style.width = '20%';
-        carta.draggable = idx === array.length - 1;
-
-        tapeteInicial.appendChild(carta)
-
-        paso += 5;
-        numeroCartas++;
-    }))
-
-    setContador(contInicial, numeroCartas)
-}
-
-function actualizarDraggabilidad(mazoString) {
-    let mazoVar = eval(mazoString);
-    mazoVar[mazoVar.length - 1].draggable = true;
-}
-
-function moverCarta(e) {
-    e.dataTransfer.setData("text/plain/palo", e.target.dataset["palo"]);
-    e.dataTransfer.setData("text/plain/mazo", e.target.dataset["mazo"]);
-    e.dataTransfer.setData("text/plain/numero", e.target.dataset["numero"]);
-}
-
-function recibirCarta(e) {
-    e.preventDefault();
-
-    let palo = e.dataTransfer.getData("text/plain/palo");
-    let mazo = e.dataTransfer.getData("text/plain/mazo");
-    let numero = e.dataTransfer.getData("text/plain/numero");
-}
 
 //  Función encargada de incrementar en uno el contenido textual del elemento contador que recibe por parámetro
 function incContador(contador) {
