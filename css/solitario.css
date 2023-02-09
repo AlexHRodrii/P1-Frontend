@@ -1,19 +1,119 @@
 /**
-	Especificaciones CSS para el juego del solitario 
+	Especificaciones CSS para el juego del solitario. 
 */
 
-/* /*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! 
-	Completar los estilos que faltan y modificar al gusto del alumno
-**/
+/**
+	Completar los estilos que faltan y modificar al gusto del alumno.
+*/
+
+/*Medidas de la imagen del logo de la VIU.*/
 img.viu{
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 85px;
 }
+
+/*Medidas de la imagen de reiniciar.*/
+img.reiniciar{
+	height: 20px;
+	width: 30px;
+}
+
+/*Especificaciones y color para el botón de reiniciar.*/
+.reset{
+	background-color: #CB1D11; 
+	border-color: #CB1D11; 
+	color:white; 
+	width:140px; 
+	height:40px; 
+	FONT-SIZE: 12pt; 
+	FONT-FAMILY: Verdana;
+}
+
+/*Especificaciones e imagen de fondo para la cabecera.*/
+div#cabecera {
+    position: absolute;
+    top: 0;
+	width: 100%;
+
+	background: url('imagenes/cabecera.png');
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+/*Especificaciones de las instrucciones.*/
+div#instrucciones {
+    top: 0;
+	width: 100%;
+}
+
+/* Especificaciones del título de las instrucciones.*/
+h2#instruccionestitulo{ 
+	margin: 30px;
+	text-align: center; 
+	color: black;
+	font-weight: bolder;
+	FONT-SIZE: 30pt; 
+}
+
+/* Especificaciones del parrafo de las instrucciones.*/
+h4#instruccionestexto{ 
+	margin-left:150px;
+	margin-right:150px;
+	margin-top:40px;
+	margin-bottom: 50px;
+	text-align: left; 
+	color: black;
+	FONT-SIZE: 14pt; 
+}
+
+/*Especificaciones y color de fondo para los creditos.*/
+div#creditos{
+	background:#412106;
+	top: 20px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+/* Especificaciones del texto de los creditos.*/
+h3#creditostitulo{ 
+	margin: 30px;
+	text-align: center; 
+	color: white;
+}
+
+/*Especificaciones e imagen de fondo para el container. Como el tiempo y los movimientos estan en el centro y el botón reiniciar a la derecha, hemos creado las clases
+right y center para poder alinearlo de dicha forma.*/
+.container{
+	text-align:center;
+	width: 100%;
+	font-size: 30px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	color: #FFFFFF;
+	background: url('imagenes/cabecera.png');
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+/* Especificación para que el botón reiniciar este a la derecha.*/
+.right{
+    float: right;
+}
+
+/* Especificación para que el tiempo y los movimientos esten en el centro.*/
+.center{
+   display:inline-block;
+   text-align:center;
+}
+
+
 
 /* Todos los contadores estarán ubicados en la parte inferior 
    derecha (position absolute) de los respectivos tapetes (position relative).
 */
 .contador {
+	color: white;
+	font-size: 20px;
 	position: absolute;
 	bottom: 0px;
 	right: 3px;
@@ -23,18 +123,18 @@ img.viu{
 /* Centrado del título y color */
 h1#titulo {
 	text-align: center;
-	color: #E65014;
-}
-
-/* Centrado de los marcadores de tiempo y movimientos */
-h2#marcadores{ 
-	text-align: center; 
+	font-size: 60px;
+	color: #FFFFFF;
 }
 
 /* Mesa que contiene a los tapetes centrados */
 div#mesa{
 	text-align: center;
-	margin:20px;
+	padding: 200px 0 49px 0;
+
+	background: url('imagenes/mesa.png');
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 /* Todos los tapetes con position relative para que
@@ -48,23 +148,35 @@ div.tapete{
 
 /* Dimensiones y color de fondo para el tapete inicial */
 div.tapete#inicial{
-	width: 340px;
-	height: 340px;			
-	background-color: lightgrey;
+	width: 600px;
+	height: 520px;			
+
+	background: url('imagenes/tapete.png');
+	background-repeat: no-repeat;
+	background-size: cover;
+
 }
 
 /* Dimensiones para todos los tapetes salvo el inicial */
 div.tapete:not(#inicial){				
 	height: 125px;
 	width: 100px;
+	border-radius: 10px;
 }
 
 /* Color de fondo para el tapete de las cartas sobrantes */
 div.tapete#sobrantes{
-	background-color: lightblue;
+	
+	background: url('imagenes/carta.png');
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 /* Color de fondo de los tapetes receptores */
 div.tapete.receptor{
-	background-color: lightgreen;
+	border: black 5px solid;
+
+	background: url('imagenes/reversa.png');
+	background-repeat: no-repeat;
+	background-size: contain;
 }
