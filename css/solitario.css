@@ -8,8 +8,8 @@
 
 /*Medidas de la imagen del logo de la VIU.*/
 img.viu{
-  width: 150px;
-  height: 85px;
+  width: 180px;
+  height: 100px;
 }
 
 /*Medidas de la imagen de reiniciar.*/
@@ -18,8 +18,8 @@ img.reiniciar{
 	width: 30px;
 }
 
-/*Especificaciones y color para el botón de reiniciar.*/
-.reset{
+/*Especificaciones y color para los botones de la actividad.*/
+.botones{
 	background-color: #CB1D11; 
 	border-color: #CB1D11; 
 	color:white; 
@@ -29,11 +29,14 @@ img.reiniciar{
 	FONT-FAMILY: Verdana;
 }
 
-/*Especificaciones e imagen de fondo para la cabecera.*/
+/*Especificaciones e imagen de fondo para la cabecera. Como título está a la izquierda y el logo de la VIU a la derecha, hemos creado las clases
+right y left para poder alinearlo de dicha forma.*/
 div#cabecera {
     position: absolute;
     top: 0;
 	width: 100%;
+	padding-top: 10px;
+	padding-bottom: 10px;
 
 	background: url('imagenes/cabecera.png');
 	background-repeat: no-repeat;
@@ -50,7 +53,7 @@ div#instrucciones {
 h2#instruccionestitulo{ 
 	margin: 30px;
 	text-align: center; 
-	color: black;
+	color: white;
 	font-weight: bolder;
 	FONT-SIZE: 30pt; 
 }
@@ -62,7 +65,7 @@ h4#instruccionestexto{
 	margin-top:40px;
 	margin-bottom: 50px;
 	text-align: left; 
-	color: black;
+	color: white;
 	FONT-SIZE: 14pt; 
 }
 
@@ -95,9 +98,16 @@ right y center para poder alinearlo de dicha forma.*/
 	background-size: cover;
 }
 
-/* Especificación para que el botón reiniciar este a la derecha.*/
+/* Especificación para que el botón reiniciar y el logo de la VIU esten a la derecha.*/
 .right{
+	margin-right: 10px;
     float: right;
+}
+
+/* Especificación para que el título este a la izquierda.*/
+.left{
+	margin-left: 10px;
+    float: left;
 }
 
 /* Especificación para que el tiempo y los movimientos esten en el centro.*/
@@ -129,8 +139,8 @@ h1#titulo {
 
 /* Mesa que contiene a los tapetes centrados */
 div#mesa{
-	text-align: center;
-	padding: 200px 0 49px 0;
+	text-align: left;
+	padding: 170px 0 49px 60px;
 
 	background: url('imagenes/mesa.png');
 	background-repeat: no-repeat;
@@ -166,7 +176,6 @@ div.tapete:not(#inicial){
 
 /* Color de fondo para el tapete de las cartas sobrantes */
 div.tapete#sobrantes{
-	
 	background: url('imagenes/carta.png');
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -174,9 +183,9 @@ div.tapete#sobrantes{
 
 /* Color de fondo de los tapetes receptores */
 div.tapete.receptor{
-	border: black 5px solid;
+	border: white 5px solid;
 
 	background: url('imagenes/reversa.png');
 	background-repeat: no-repeat;
-	background-size: contain;
+	background-size: cover;
 }

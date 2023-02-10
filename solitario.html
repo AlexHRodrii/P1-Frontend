@@ -9,6 +9,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 		
 		<!-- Invocar a los ficheros de estilos y al JavaScript donde proceda.-->     
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<link rel="stylesheet" href="css/solitario.css">
 		<script src="js/solitario.js"></script>
 
@@ -16,16 +17,48 @@
 
     <body>
 			<!-- Título principal. Este estará compuesto del título y al lado una imagen del logo de la universidad.-->
-			<div id="cabecera"><h1 id="titulo">Juego del solitario <img class="viu" src="imagenes/logoVIU.png"></h1></div>
+			<div id="cabecera">
+				<h1 id="titulo">
+					<div class="left">
+						Juego del solitario
+					</div>  
+					<div class="right">
+						<img class="viu" src="imagenes/logoVIU.png">
+					</div>
+				</h1>
+			</div>
 
 			<!-- La "mesa" contendrá los 6 tapetes. En la parte superior dos de ellos 
 				y en la parte inferior los cuatro restantes. Los contadores de los
 				mazos de cartas de cada tapete están indicados oportunamente dentro
 				de elementos span.-->
 			<div id="mesa">
-				<div class="tapetes_superiores">
-					<div id="inicial" class="tapete"><span id="contador_inicial" class="contador"></span></div><!--
-					--><div id="sobrantes" class="tapete"><span id="contador_sobrantes" class="contador"></span></div>
+				<div class="right" style="margin-right:50px">
+					<button id="botones" class="btn btn-danger" onClick="document.getElementById('instrucciones').style.visibility='visible'"> Como jugar</button>
+				</div>
+				<div class="row">
+					<div class="col">
+						<div class="tapetes_superiores">
+									<div id="inicial" class="tapete"><span id="contador_inicial" class="contador"></span></div><!--
+									--><div id="sobrantes" class="tapete"><span id="contador_sobrantes" class="contador"></span></div>
+						</div>
+					</div>
+					<div class="col">
+						<!-- Las "instrucciones" contendrán las reglas del juego.-->
+						<div id="instrucciones" class="right" style="visibility:hidden">
+							<h2 id="instruccionestitulo">
+									Explicación del juego 
+							</h2>
+							<h4 id="instruccionestexto">
+										<p>Respecto a las reglas del juego, hay que tener en cuenta las siguientes consideraciones:</p>
+										<p style="margin-left:50px">▪ La baraja de cartas será una baraja VIU, que consiste en:</p>
+										<p style="margin-left:100px">▫ 12 números: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 y 12.</p>
+										<p style="margin-left:100px">▫ 4 palos: “vius”, cuadrados, hexágonos y círculos.</p>
+										<p style="margin-left:50px">▪ Existirán 6 tapetes (superficies que albergarán mazos de cartas): el tapete inicial, el tapete de sobrantes y 
+										cuatro tapetes receptores.</p>
+								</h4>
+						</div>
+					</div>
 				</div>
 				<div id="receptor1" class="tapete receptor"><span id="contador_receptor1" class="contador"></span></div><!--
 				--><div id="receptor2" class="tapete receptor"><span id="contador_receptor2" class="contador"></span></div><!--
@@ -39,7 +72,7 @@
 			<div class="container">
 					<div class="right">
 						<!-- Botón de reset que reinicia todo: partida, contadores de tiempo, de movimientos, ... -->
-						<button id="reset" class="btn btn-danger"> <img class="reiniciar" src="imagenes/reiniciar.png"/> Reiniciar</button>
+						<button id="botones" class="btn btn-danger"> <img class="reiniciar" src="imagenes/reiniciar.png"/> Reiniciar</button>
 					</div>
 					<div class="center">
 						<!-- Siguiente línea donde se indicará el tiempo transcurrido y la cantidad
@@ -51,42 +84,6 @@
 					</div>
 			</div>
 
-			<!-- Las "instrucciones" contendrán las reglas del juego.-->
-			<div id="instrucciones">
-					<h2 id="instruccionestitulo">
-							Explicación del juego 
-					</h2>
-					<h4 id="instruccionestexto">
-							<p>Respecto a las reglas del juego, hay que tener en cuenta las siguientes consideraciones:</p>
-							<p style="margin-left:50px">▪ La baraja de cartas será una baraja VIU, que consiste en:</p>
-							<p style="margin-left:100px">▫ 12 números: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 y 12.</p>
-							<p style="margin-left:100px">▫ 4 palos: “vius”, cuadrados, hexágonos y círculos.</p>
-							<p style="margin-left:50px">▪ Existirán 6 tapetes (superficies que albergarán mazos de cartas): el tapete inicial, el tapete de sobrantes y 
-							cuatro tapetes receptores.</p>
-							<p style="margin-left:50px">▪ El juego consiste en coger la carta de arriba, bien del mazo ubicado en el tapete inicial, bien del tapete de 
-							sobrantes, e intentar depositarla en alguno de los mazos de los cuatro tapetes <br> receptores, siempre y cuando se cumplan ciertas 
-							condiciones. </p>
-							<p style="margin-left:50px">▪El uso de las cartas del mazo de cada tapete es el siguiente:</p>
-							<p style="margin-left:100px">▫ Tapete inicial: conteniendo al principio el mazo completo y barajado aleatoriamente. Las cartas se cogerán 
-							por arriba, de una en una. La intención es intentar colocar la carta cogida en alguno de los tapetes receptores siempre y cuando se cumplan 
-							ciertas condiciones. </p>
-							<p style="margin-left:100px">▫ Tapete de sobrantes: empleado para depositar temporalmente en su mazo las cartas provenientes del mazo del 
-							tapete inicial. Cualquier carta del tapete inicial (siempre y cuando sea la de arriba) se puede depositar en este tapete. Además, la última 
-							carta depositada en el mazo de este tapete sirve de fuente alternativa de cartas al mazo del tapete inicial, para intentar depositarla sobre 
-							algún mazo de los tapetes receptores en cualquier momento, siempre y cuando se cumplan ciertas reglas tal y como ocurriría si proviniera 
-							del mazo del tapete inicial. </p>
-							<p style="margin-left:100px">▫ Cuatro tapetes receptores: donde se irán depositando, sobre los mazos respectivos, las cartas en orden 
-							decreciente (comenzará obligatoriamente con el 12 como primera carta y finalizará con la última) y alternando los colores (naranja y gris) 
-							en la secuencia de cartas que se van depositando en cada mazo. Una vez depositada una carta en uno de los cuatro tapetes receptores, 
-							no se podrá volver a colocar en otro tapete.</p>
-							<p style="margin-left:50px">▪ Cuando se agoten las cartas del mazo del tapete inicial, las que queden en el tapete de sobrantes serán 
-							automáticamente barajadas y dispuestas de nuevo en el tapete inicial, volviendo otra vez a comenzar con estas cartas restantes. </p>
-							<p style="margin-left:50px">▪ El juego finaliza cuando no queda ninguna carta ni en el tapete inicial ni en el tapete de sobrantes. 
-							Cuando ocurra tal situación, se mostrará una ventana de aviso indicando el fin del juego y proporcionando información sobre la partida: 
-							el tiempo de juego y la cantidad de movimientos realizados.</p>
-					</h4>
-			</div>
-
 			<!-- Los "creditos" contendrán los participantes del grupo que han realizado la actividad.-->
 			<div id="creditos">
 				<h3 id="creditostitulo">
@@ -94,6 +91,5 @@
 						Internacional de Valencia Desarrollada por Alejandro Hernández Rodríguez, Daniel Luengo Echeverría y Alberto Diez Busto
 				</h3>
 			</div>
-				
     </body>
 </html>
