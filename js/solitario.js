@@ -10,7 +10,7 @@ let palos = ["viu", "cua", "hex", "cir"];
 let numeros = [9, 10, 11, 12];
 
 // paso (top y left) en pixeles de una carta a la siguiente en un mazo
-let paso = 5;
+let paso = 50;
 
 // Tapetes (se deben inicializar posteriormente a de la carga del HTML sino sus referencias serán 'null')
 let tapeteInicial
@@ -62,9 +62,6 @@ function resetGame() {
         }
     });
 
-    // Restablecimiento del paso
-    paso = 5;
-
     // Creación del mazo inicial de juego
     mazoInicial = cargarMazoInicial()
 
@@ -78,6 +75,13 @@ function resetGame() {
 
 function endGame() {
 
+}
+
+function showGuide() {
+    let modal = document.getElementById('modal-instrucciones');
+
+    modal.style.display = "block"
+    console.log('Hola')
 }
 
 // Función encargada de gestionar el inicio del juego (inicialización de mazos, tapetes y contadores)
@@ -102,6 +106,9 @@ function comenzarJuego() {
 
     // Registro del evento 'click' asociado al botón para reiniciar la partida
     document.getElementById('reset').addEventListener('click', resetGame);
+
+    // Registro del evento 'click' asociado al botón para mostrar las instrucciones del juego
+    document.getElementById('guide').addEventListener('click', showGuide);
 
     // Desactivación de eventos por defecto no deseados
     [tapeteInicial, tapeteSobrantes, tapeteReceptor1, tapeteReceptor2, tapeteReceptor3, tapeteReceptor4].forEach((tapete) => {
@@ -154,11 +161,14 @@ function cargarMazoInicial() {
     ajustando las propiedades de estilo necesarias de las cartas para que se muestren correctamente
 */
 function cargarTapeteInicial(mazo) {
+    paso = 50;
     mazo.forEach(((carta, idx, array) => {
         carta.style.position = 'absolute';
         carta.style.left = `${paso}px`
         carta.style.top = `${paso}px`
         carta.style.width = '20%';
+        carta.style.margin = "auto"
+        carta.style.transform = "";
         carta.draggable = idx === array.length - 1;
         carta.setAttribute('data-tapete', 'inicial')
 
@@ -231,10 +241,11 @@ function trasladarCarta(tapeteOrigen, tapeteDestino, draggable) {
     tapeteOrigen.removeChild(carta);
 
     carta.draggable = draggable;
-    carta.style.width = '60%';
+    carta.style.position = 'absolute';
+    carta.style.width = '80%';
     carta.style.top = '50%';
     carta.style.left = '50%';
-    carta.style.transform = 'translate(-50%, -50%)';
+    carta.style.transform = "translate(-50%, -50%)"
     carta.setAttribute('data-tapete', tapeteDestino.id)
 
     mazoDestino.push(carta);
