@@ -4,10 +4,10 @@
 let palos = ["viu", "cua", "hex", "cir"];
 
 // Array de número de cartas
-// let numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+let numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 // En las pruebas iniciales solo se trabajará con cuatro cartas por palo:
-let numeros = [9, 10, 11, 12];
+// let numeros = [9, 10, 11, 12];
 
 // paso (top y left) en pixeles de una carta a la siguiente en un mazo
 let paso = 50;
@@ -74,14 +74,10 @@ function resetGame() {
 }
 
 function endGame() {
-
-}
-
-function showGuide() {
-    let modal = document.getElementById('modal-instrucciones');
-
-    modal.style.display = "block"
-    console.log('Hola')
+    if(temporizador) clearInterval(temporizador)
+    document.getElementById('modal-endgame').style.display = "block";
+    document.getElementById('resumen-movimientos').innerText = contMovimientos.innerText;
+    document.getElementById('resumen-tiempo').innerText = contTiempo.innerText;
 }
 
 // Función encargada de gestionar el inicio del juego (inicialización de mazos, tapetes y contadores)
@@ -108,7 +104,13 @@ function comenzarJuego() {
     document.getElementById('reset').addEventListener('click', resetGame);
 
     // Registro del evento 'click' asociado al botón para mostrar las instrucciones del juego
-    document.getElementById('guide').addEventListener('click', showGuide);
+    document.getElementById('guide').addEventListener('click', () => document.getElementById('modal-instrucciones').style.display = "block");
+
+    // Registro del evento 'click' asociado al botón para cerrar las instrucciones del juego
+    document.getElementById('close-modal').addEventListener('click', () => document.getElementById('modal-instrucciones').style.display = "none");
+
+    // Registro del evento 'click' asociado al botón para reiniciar el juego después de finalizarlo
+    document.getElementById('reset-end').addEventListener('click', () => {document.getElementById('modal-endgame').style.display = "none"; resetGame()});
 
     // Desactivación de eventos por defecto no deseados
     [tapeteInicial, tapeteSobrantes, tapeteReceptor1, tapeteReceptor2, tapeteReceptor3, tapeteReceptor4].forEach((tapete) => {
@@ -135,14 +137,14 @@ function comenzarJuego() {
     arrancarTiempo();
 }
 
-/*
-    Función orientada a crear el mazo inicial de juego (vector de elementos <img>).
-    El enunciado sugiere realizar un bucle anidado para formar el vector de mazo inicial; sin embargo,
-    es más eficiente hacer uso de la programación funcional de javascript usando las funciones map() y flatMap().
-    Estas funciones nos permiten ejecutar el callback deseado (en nuestro caso una concatenación de strings)
-    en cada uno de los elementos del vector
-     */
+
+// Función orientada a crear el mazo inicial de juego (vector de elementos <img>).
 function cargarMazoInicial() {
+    /*
+        El enunciado sugiere realizar un bucle anidado para formar el vector de mazo inicial; sin embargo,
+        es más eficiente hacer uso de la programación funcional de javascript usando las funciones map() y flatMap().
+        Estas funciones nos permiten obtener un nuevo vector resultado de ejecutar el callback deseado (en nuestro caso una concatenación de strings) en cada uno de los elementos del vector
+    */
     return palos.flatMap(palo => numeros.map(numero => {
         let imgElement = new Image()
         imgElement.src = `imagenes/baraja/${numero}-${palo}.png` // TODO --> Revisar path
@@ -161,7 +163,10 @@ function cargarMazoInicial() {
     ajustando las propiedades de estilo necesarias de las cartas para que se muestren correctamente
 */
 function cargarTapeteInicial(mazo) {
+    // Definición del paso (necesario si está función se ejecuta al rebarajar y el paso se ha modificado)
     paso = 50;
+
+    // Para cada una de las cartas del mazo se establecen las propiedades necesarias y se añade la carta al tapete
     mazo.forEach(((carta, idx, array) => {
         carta.style.position = 'absolute';
         carta.style.left = `${paso}px`
@@ -179,20 +184,23 @@ function cargarTapeteInicial(mazo) {
     }))
 }
 
+// Función que se ejecuta cuando se inicia el desplazamiento de una carta y traslada la información necesaria
 function iniciarDragCarta(e) {
     e.dataTransfer.setData("text/plain/numero", e.target.dataset["numero"]);
     e.dataTransfer.setData("text/plain/palo", e.target.dataset["palo"]);
     e.dataTransfer.setData("text/plain/tapete", e.target.dataset["tapete"]);
 }
 
+// Función la cual se ejecuta al soltar la carta en un tapete
 function recibirCarta(e, tapete) {
+    // Eliminamos el comportamiento por defecto y obtenemos la información necesaria de la carta
     e.preventDefault();
     let numero = parseInt(e.dataTransfer.getData("text/plain/numero"));
     let palo = e.dataTransfer.getData("text/plain/palo");
     let tapeteOrigen = document.getElementById(e.dataTransfer.getData("text/plain/tapete"));
     let tapeteDestino = document.getElementById(tapete.id);
 
-
+    // En función del tapete de destino se verifica si la carta puede ser trasladada y en caso correcto se completa la operación
     switch (tapeteDestino.id) {
         case 'receptor1':
         case 'receptor2':
@@ -205,9 +213,11 @@ function recibirCarta(e, tapete) {
             break;
     }
 
+    // Una vez realizado el traslado se verifica si el juego ha finalizado o si, por el contrario, no quedan cartas en el tapete inicial
     if (mazoInicial.length === 0 && mazoSobrantes.length === 0) {
         endGame();
     } else if (mazoInicial.length === 0) {
+        // Si no quedan cartas en el tapete sobrante pero aún no ha finalizado el juego se barajan y se disponen en el tapete incial de nuevo
         mazoInicial = [...mazoSobrantes];
         mazoSobrantes = [];
         setContador(contSobrantes, 0);
@@ -216,6 +226,7 @@ function recibirCarta(e, tapete) {
     }
 }
 
+// Función la cual recibe el tapete de destino de una carta y los datos de la carta que está intentando soltarse en ese tapete, basándose en esto verifica si es posible dejar la carta en ese tapete
 function isDropAllowed(tapeteDestino, numero, palo) {
     let mazoDestino = obtenerMazoDesdeTapete(tapeteDestino)
 
@@ -232,6 +243,7 @@ function isDropAllowed(tapeteDestino, numero, palo) {
     return numero === 12;
 }
 
+// Función encargada de realizar el proceso de traslado de una carta y actualizar toda la información necesaria en los tapetes afectados
 function trasladarCarta(tapeteOrigen, tapeteDestino, draggable) {
     let mazoOrigen = obtenerMazoDesdeTapete(tapeteOrigen)
     let mazoDestino = obtenerMazoDesdeTapete(tapeteDestino)
@@ -256,6 +268,7 @@ function trasladarCarta(tapeteOrigen, tapeteDestino, draggable) {
     decContador(obtenerContadorDesdeTapete(tapeteOrigen));
 }
 
+// Función auxiliar para obtener la variable que representa el mazo de un determinado tapete
 function obtenerMazoDesdeTapete(tapete) {
     const correspondencias = {
         inicial: 'mazoInicial',
@@ -269,6 +282,7 @@ function obtenerMazoDesdeTapete(tapete) {
     return eval(correspondencias[tapete.id])
 }
 
+// Función auxiliar para obtener la variable que representa el contador de un determinado tapete
 function obtenerContadorDesdeTapete(tapete) {
     const correspondencias = {
         inicial: 'contInicial',
@@ -282,7 +296,7 @@ function obtenerContadorDesdeTapete(tapete) {
     return eval(correspondencias[tapete.id])
 }
 
-
+// Función auxiliar para obtener el color de una carta en base a su palo
 function obtenerColorCarta(palo) {
     return ["viu", "cua"].includes(palo) ? 'naranja' : 'gris';
 }

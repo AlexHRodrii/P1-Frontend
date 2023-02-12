@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="es-ES">
 <head>
     <title>Solitario VIU</title>
     <meta charset="utf-8">
@@ -18,7 +18,6 @@
 
 <body>
 <div class="container-fluid">
-    <!-- Título principal. Este estará compuesto del título y al lado una imagen del logo de la universidad.-->
     <div id="cabecera" class="row d-flex justify-content-between">
         <div class="counters col-md-auto mt-3 mb-3">
             <div class="row">
@@ -86,23 +85,69 @@
             </div>
         </div>
     </div>
-    <!-- The Modal -->
     <div id="modal-instrucciones" class="modal">
-        <!-- Modal content -->
         <div class="modal-content">
-            <div class="">
+            <span id="close-modal">&times;</span>
+            <span style="font-family: 'Oswald', sans-serif; font-size: 3rem">Instrucciones de juego</span><br>
+            <p>
+                La baraja de cartas será una baraja VIU, que consiste en:<br>
+                &#127183; 12 números: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 y 12.<br>
+                &#127183; 4 palos: “vius”, cuadrados, hexágonos y círculos.<br><br>
 
-            </div>
-            <p>Enhorabuena has completado el juego!!</p><br>
-            <span>Movimientos: <span id="resumen-movimientos"></span></span>
-            <span>Tiempo: <span id="resumen-tiempo"></span></span>
+                Existirán 6 tapetes (superficies que albergarán mazos de cartas): el tapete inicial, el tapete de
+                sobrantes y cuatro tapetes receptores, tal y como puede observarse en la Figura 1, que albergarán
+                sendos mazos de cartas a lo largo de la partida.<br>
+
+                El juego consiste en coger la carta de arriba, bien del mazo ubicado en el tapete inicial, bien del
+                tapete de sobrantes, e intentar depositarla en alguno de los mazos de los cuatro tapetes receptores,
+                siempre y cuando se cumplan ciertas condiciones.<br><br>
+                El uso de las cartas del mazo de cada tapete es el siguiente:<br>
+                &#11093; Tapete inicial: conteniendo al principio el mazo completo y barajado aleatoriamente. Las
+                cartas se cogerán por arriba, de una en una. La intención es intentar colocar la carta
+                cogida en alguno de los tapetes receptores siempre y cuando se cumplan ciertas
+                condiciones.<br><br>
+                &#11093; Tapete de sobrantes: empleado para depositar temporalmente en su mazo las cartas
+                provenientes del mazo del tapete inicial. Cualquier carta del tapete inicial (siempre y
+                cuando sea la de arriba) se puede depositar en este tapete. Además, la última carta
+                depositada en el mazo de este tapete sirve de fuente alternativa de cartas al mazo del
+                tapete inicial, para intentar depositarla sobre algún mazo de los tapetes receptores en
+                cualquier momento, siempre y cuando se cumplan ciertas reglas tal y como ocurriría si
+                proviniera del mazo del tapete inicial.<br><br>
+                &#11093; Cuatro tapetes receptores: donde se irán depositando, sobre los mazos respectivos, las
+                cartas en orden decreciente (comenzará obligatoriamente con el 12 como primera carta
+                y finalizará con la última) y alternando los colores (naranja y gris) en la secuencia de cartas
+                que se van depositando en cada mazo. Una vez depositada una carta en uno de los cuatro
+                tapetes receptores, no se podrá volver a colocar en otro tapete.<br><br>
+
+                Cuando se agoten las cartas del mazo del tapete inicial, las que queden en el tapete de sobrantes
+                serán automáticamente barajadas y dispuestas de nuevo en el tapete inicial, volviendo otra vez a
+                comenzar con estas cartas restantes.<br><br>
+
+                &#11088; El juego finaliza cuando no queda ninguna carta ni en el tapete inicial ni en el tapete de
+                sobrantes. ¡Buena suerte!
+            </p>
         </div>
     </div>
-    <!-- The Modal -->
     <div id="modal-endgame" class="modal">
-        <!-- Modal content -->
         <div class="modal-content">
-            <p>Some text in the Modal Endgame..</p>
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-12">
+                    <span style="font-family: 'Oswald', sans-serif; font-size: 3rem">Resumen de partida</span><br>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-around results">
+                <div class="col-md-auto">
+                    <span>Movimientos: <span style="font-weight: bold" id="resumen-movimientos"></span></span>
+                </div>
+                <div class="col-md-auto">
+                    <span>Tiempo: <span style="font-weight: bold" id="resumen-tiempo"></span></span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center mt-3">
+                <div class="col-md-auto">
+                    <button class="button-styled" role="button" id="reset-end">Reiniciar juego</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
