@@ -1,191 +1,161 @@
 /**
-	Especificaciones CSS para el juego del solitario. 
+	Especificaciones CSS para el juego del solitario.
 */
 
 /**
 	Completar los estilos que faltan y modificar al gusto del alumno.
 */
 
-/*Medidas de la imagen del logo de la VIU.*/
-img.viu{
-  width: 180px;
-  height: 100px;
+@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+body {
+    background-color: #D1BFAE;
 }
 
-/*Medidas de la imagen de reiniciar.*/
-img.reiniciar{
-	height: 20px;
-	width: 30px;
+#cabecera {
+    background: url("imagenes/cabecera.png") no-repeat;
+    background-size: cover;
 }
 
-/*Especificaciones y color para los botones de la actividad.*/
-.botones{
-	background-color: #CB1D11; 
-	border-color: #CB1D11; 
-	color:white; 
-	width:140px; 
-	height:40px; 
-	FONT-SIZE: 12pt; 
-	FONT-FAMILY: Verdana;
+#logo {
+    background: #FFFFFF;
+    border-radius: 30px;
 }
 
-/*Especificaciones e imagen de fondo para la cabecera. Como título está a la izquierda y el logo de la VIU a la derecha, hemos creado las clases
-right y left para poder alinearlo de dicha forma.*/
-div#cabecera {
+.title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 5em;
+    color: #FFFFFF;
+}
+
+.counters {
+    font-family: 'Oswald', sans-serif;
+    font-size: 3em;
+    color: #FFFFFF;
+}
+
+.contador {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2em;
+    color: #FFFFFF;
+    margin-left: 5px;
     position: absolute;
     top: 0;
-	width: 100%;
-	padding-top: 10px;
-	padding-bottom: 10px;
-
-	background: url('imagenes/cabecera.png');
-	background-repeat: no-repeat;
-	background-size: cover;
 }
 
-/*Especificaciones de las instrucciones.*/
-div#instrucciones {
+.tapete {
+    width: 100%;
+    height: 100%;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-image: url("imagenes/tapete.png");
+    background-size: cover;
+}
+
+.receptor {
+    width: 10vw;
+    height: 27vh;
+    border: 3px solid black;
+    margin-left: 5px;
+    border-radius: 10px;
+    background-image: url("imagenes/reversa.png");
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
     top: 0;
-	width: 100%;
-}
-
-/* Especificaciones del título de las instrucciones.*/
-h2#instruccionestitulo{ 
-	margin: 30px;
-	text-align: center; 
-	color: white;
-	font-weight: bolder;
-	FONT-SIZE: 30pt; 
-}
-
-/* Especificaciones del parrafo de las instrucciones.*/
-h4#instruccionestexto{ 
-	margin-left:150px;
-	margin-right:150px;
-	margin-top:40px;
-	margin-bottom: 50px;
-	text-align: left; 
-	color: white;
-	FONT-SIZE: 14pt; 
-}
-
-/*Especificaciones y color de fondo para los creditos.*/
-div#creditos{
-	background:#412106;
-	top: 20px;
-	padding-top: 5px;
-	padding-bottom: 5px;
-}
-
-/* Especificaciones del texto de los creditos.*/
-h3#creditostitulo{ 
-	margin: 30px;
-	text-align: center; 
-	color: white;
-}
-
-/*Especificaciones e imagen de fondo para el container. Como el tiempo y los movimientos estan en el centro y el botón reiniciar a la derecha, hemos creado las clases
-right y center para poder alinearlo de dicha forma.*/
-.container{
-	text-align:center;
-	width: 100%;
-	font-size: 30px;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	color: #FFFFFF;
-	background: url('imagenes/cabecera.png');
-	background-repeat: no-repeat;
-	background-size: cover;
-}
-
-/* Especificación para que el botón reiniciar y el logo de la VIU esten a la derecha.*/
-.right{
-	margin-right: 10px;
-    float: right;
-}
-
-/* Especificación para que el título este a la izquierda.*/
-.left{
-	margin-left: 10px;
-    float: left;
-}
-
-/* Especificación para que el tiempo y los movimientos esten en el centro.*/
-.center{
-   display:inline-block;
-   text-align:center;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 
-
-/* Todos los contadores estarán ubicados en la parte inferior 
-   derecha (position absolute) de los respectivos tapetes (position relative).
-*/
-.contador {
-	color: white;
-	font-size: 20px;
-	position: absolute;
-	bottom: 0px;
-	right: 3px;
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
 }
 
 
-/* Centrado del título y color */
-h1#titulo {
-	text-align: center;
-	font-size: 60px;
-	color: #FFFFFF;
+.button-styled {
+    align-items: center;
+    background-clip: padding-box;
+    background-color: #fa6400;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: 'Montserrat', system-ui, -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    justify-content: center;
+    line-height: 1.25;
+    margin: 0;
+    min-height: 3rem;
+    padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+    position: relative;
+    text-decoration: none;
+    transition: all 250ms;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: baseline;
+    width: auto;
 }
 
-/* Mesa que contiene a los tapetes centrados */
-div#mesa{
-	text-align: left;
-	padding: 170px 0 49px 60px;
-
-	background: url('imagenes/mesa.png');
-	background-repeat: no-repeat;
-	background-size: cover;
+.button-styled:hover,
+.button-styled:focus {
+    background-color: #fb8332;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
 }
 
-/* Todos los tapetes con position relative para que
-   los respectivos mazos (arrays de <img>) puedan
-   posicionarse de manera absoluta respecto a ellos */
-div.tapete{
-	display: inline-block;
-	position: relative;
-	margin: 10px;
+.button-styled:hover {
+    transform: translateY(-1px);
 }
 
-/* Dimensiones y color de fondo para el tapete inicial */
-div.tapete#inicial{
-	width: 600px;
-	height: 520px;			
-
-	background: url('imagenes/tapete.png');
-	background-repeat: no-repeat;
-	background-size: cover;
-
+.button-styled:active {
+    background-color: #c85000;
+    box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+    transform: translateY(0);
 }
 
-/* Dimensiones para todos los tapetes salvo el inicial */
-div.tapete:not(#inicial){				
-	height: 125px;
-	width: 100px;
-	border-radius: 10px;
+.modal-content {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.75rem;
 }
 
-/* Color de fondo para el tapete de las cartas sobrantes */
-div.tapete#sobrantes{
-	background: url('imagenes/carta.png');
-	background-repeat: no-repeat;
-	background-size: cover;
+.results {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.5rem;
 }
 
-/* Color de fondo de los tapetes receptores */
-div.tapete.receptor{
-	border: white 5px solid;
-
-	background: url('imagenes/reversa.png');
-	background-repeat: no-repeat;
-	background-size: cover;
+#close-modal {
+    font-size: 4rem;
+    position: absolute;
+    top: 5px;
+    right: 15px;
 }
+
+#close-modal:hover,
+#close-modal:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
